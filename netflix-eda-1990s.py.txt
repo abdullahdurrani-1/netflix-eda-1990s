@@ -1,0 +1,58 @@
+# 📊 Netflix 1990s Movie Analysis - EDA Project
+
+# -------------------------------
+# 1. Import required libraries
+# -------------------------------
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# -------------------------------
+# 2. Load the dataset
+# -------------------------------
+netflix_df = pd.read_csv("netflix_data.csv")
+
+# -------------------------------
+# 3. Filter for only Movies (not TV Shows)
+# -------------------------------
+netflix_subset = netflix_df[netflix_df["type"] == "Movie"]
+
+# -------------------------------
+# 4. Filter movies released in the 1990s (1990–1999)
+# -------------------------------
+movies_1990s = netflix_subset[
+    (netflix_subset["release_year"] >= 1990) & 
+    (netflix_subset["release_year"] < 2000)
+]
+
+# -------------------------------
+# 5. Visualize the duration distribution
+# -------------------------------
+plt.figure(figsize=(10, 6))
+plt.hist(movies_1990s["duration"], bins=10, color='skyblue', edgecolor='black')
+plt.title('🎬 Movie Durations in the 1990s')
+plt.xlabel('Duration (minutes)')
+plt.ylabel('Number of Movies')
+plt.grid(True)
+plt.show()
+
+# 📌 After viewing the chart visually, we choose:
+duration = 100  # (most frequent duration)
+
+# -------------------------------
+# 6. Filter for Action genre only
+# -------------------------------
+action_movies_1990s = movies_1990s[movies_1990s["genre"] == "Action"]
+
+# -------------------------------
+# 7. Count short Action movies (< 90 mins)
+# -------------------------------
+short_movie_count = 0
+for label, row in action_movies_1990s.iterrows():
+    if row["duration"] < 90:
+        short_movie_count += 1
+
+# -------------------------------
+# 8. Final Output
+# -------------------------------
+print("Most frequent movie duration in 1990s:", duration, "minutes")
+print("Number of short Action movies (<90 min) in 1990s:", short_movie_count)
